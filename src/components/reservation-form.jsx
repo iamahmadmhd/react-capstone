@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from './ui/button';
 import Input from './ui/input';
 import Select from './ui/select';
@@ -7,6 +7,8 @@ import RadioGroup from './ui/radio-group';
 import { useFormContext } from '../hooks/use-form';
 import { fetchAPI } from "../utils/api";
 import Textarea from './ui/textarea';
+import DangerIcon from '../icons/danger';
+import ChevronLeft from '../icons/chevron-left';
 
 const occasionOptions = [
     { label: "Birthday", value: "birthday" },
@@ -40,6 +42,7 @@ const ReservationForm = () => {
             setFirstStepError(true);
             return;
         }
+        setFirstStepError(false);
         setCurrentStep((prev) => prev + 1);
     };
     const handlePrevStep = () => {
@@ -78,16 +81,8 @@ const ReservationForm = () => {
                         className="group flex items-center text-green"
                         onClick={handlePrevStep}
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
-                            className="w-5 h-5 transform transition-transform duration-300 group-hover:-translate-x-1"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                        </svg>
+
+                        <ChevronLeft className="w-5 h-5 transform transition-transform duration-300 group-hover:-translate-x-1" />
                         <span className="ml-2">Back</span>
                     </button>
                     <h2 className="text-4xl text-green font-display mt-8">Your Contact Information</h2>
@@ -147,9 +142,7 @@ const ReservationForm = () => {
                         />
                         {firstStepError && (
                             <p className="flex items-center mt-2 text-xs text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-1.5">
-                                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                                </svg>
+                                <DangerIcon className="w-5 h-5 mr-1.5" />
                                 Please fill in all the required fields.
                             </p>
                         )}
@@ -200,9 +193,7 @@ const ReservationForm = () => {
                         />
                         {secondStepError && (
                             <p className="flex items-center mt-2 text-xs text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-1.5">
-                                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                                </svg>
+                                <DangerIcon className="w-5 h-5 mr-1.5" />
                                 Please fill in all the required fields.
                             </p>
                         )}
