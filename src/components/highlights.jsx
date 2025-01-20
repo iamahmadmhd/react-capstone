@@ -1,4 +1,4 @@
-import Button from "./ui/button";
+import Link from "./ui/link";
 import Card from "./ui/card";
 
 const highlightsData = [
@@ -37,7 +37,7 @@ const Highlights = () => {
         <section className="highlights container py-24">
             <div className="flex items-center justify-between mb-8">
                 <h2 className="text-4xl text-center font-display">Specials</h2>
-                <Button variant="primary">Online Menu</Button>
+                <Link variant="primary" href="#">Online Menu</Link>
             </div>
             <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 {highlightsData.map((highlight, index) => (
