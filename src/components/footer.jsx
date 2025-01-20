@@ -1,3 +1,6 @@
+import { navItems } from './header';
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
     return (
         <footer className="footer bg-gray py-12">
@@ -9,12 +12,11 @@ const Footer = () => {
                     <div>
                         <h3 className="text-2xl text-green font-display">Website</h3>
                         <ul className="mt-4">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Menu</a></li>
-                            <li><a href="#">Reservations</a></li>
-                            <li><a href="#">Order Online</a></li>
-                            <li><a href="#">Login</a></li>
+                            {navItems.map((item, index) => (
+                                <li key={index}>
+                                    <Link to={item.link}>{item.name}</Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                     <div className="flex flex-col">
