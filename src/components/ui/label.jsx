@@ -1,6 +1,6 @@
-const Label = ({ label, required, color, classes = "", ...props }) => {
+const Label = ({ label, required, color, className = "", ...props }) => {
     return (
-        <span className={`text-${color} ${classes}`} {...props}>
+        <span className={`text-${color} ${className}`} {...props}>
             {label}
             {required && <span className="text-red-500">*</span>}
         </span>
