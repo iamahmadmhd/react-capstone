@@ -14,7 +14,7 @@ const HeroSection = ({ variant = "home" }) => {
                     </div>
                     {variant === "home" && (
                         <div>
-                            <Link variant="primary" href="#">Online Menu</Link>
+                            <Link variant="primary" asRouterLink href="/reservations">Book a Table</Link>
                         </div>
                     )}
                 </div>
