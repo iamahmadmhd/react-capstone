@@ -41,8 +41,11 @@ This project showcases a fully functional front-end application, emphasizing mod
     ├── public/                  # Static assets
     ├── src/
     │   ├── components/          # React components
-    │   │   ├── ui/              # UI Components
+    │   │   ├── ui/              # UI components
     │   ├── pages/               # Application pages
+    │   ├── hooks/               # Custom hooks
+    │   ├── utils/               # Utility fiels
+    │   ├── icons/               # Icons
     │   └── App.js               # Main app component
     │   └── index.css            # Styles
     ├── package.json             # Project dependencies
