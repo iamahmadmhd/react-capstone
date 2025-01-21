@@ -4,52 +4,82 @@ import ReservationForm from "../components/reservation-form";
 import { FormProvider } from "../hooks/use-form";
 import { submitAPI } from "../utils/api";
 
-
 const initialValues = {
-    date: "",
-    time: '',
-    guests: 1,
-    occasion: '',
-    seating: 'indoor',
-    name: '',
-    email: '',
-    phone: '',
-    requests: ''
-}
-
-const validate = (values) => {
-    const errors = {};
-
-    if (!values.date) {
-        errors.date = 'Date is required';
+    step1: {
+        date: {
+            value: "",
+            validate: (value) => {
+                if (!value) {
+                    return 'Date is required';
+                }
+            }
+        },
+        time: {
+            value: '',
+            validate: (value) => {
+                if (!value) {
+                    return 'Time is required';
+                }
+            }
+        },
+        guests: {
+            value: 1,
+            validate: (value) => {
+                if (value < 1) {
+                    return 'Guests must be at least 1';
+                } else if (value > 50) {
+                    return 'Guests must be at most 50';
+                }
+            }
+        },
+        occasion: {
+            value: '',
+            validate: (value) => {
+                if (!value) {
+                    return 'Occasion is required';
+                }
+            }
+        },
+        seating: {
+            value: 'indoor',
+            validate: (value) => {
+                if (!value) {
+                    return 'Seating is required';
+                }
+            }
+        }
+    },
+    step2: {
+        name: {
+            value: '',
+            validate: (value) => {
+                if (!value) {
+                    return 'Name is required';
+                }
+            }
+        },
+        email: {
+            value: '',
+            validate: (value) => {
+                if (!value) {
+                    return 'Email is required';
+                }
+            }
+        },
+        phone: {
+            value: '',
+            validate: (value) => {
+                if (!value) {
+                    return 'Phone is required';
+                }
+            }
+        },
+        requests: {
+            value: '',
+            validate: () => { }
+        }
     }
-    if (!values.time) {
-        errors.time = 'Time is required';
-    }
-    if (values.guests < 1) {
-        errors.guests = 'Guests must be at least 1';
-    } else if (values.guests > 50) {
-        errors.guests = 'Guests must be at most 50';
-    }
-    if (!values.occasion) {
-        errors.occasion = 'Occasion is required';
-    }
-    if (!values.seating) {
-        errors.seating = 'Seating is required';
-    }
-    if (!values.name) {
-        errors.name = 'Name is required';
-    }
-    if (!values.email) {
-        errors.email = 'Email is required';
-    }
-    if (!values.phone) {
-        errors.phone = 'Phone is required';
-    }
-
-    return errors;
 };
-
 
 const Reservations = () => {
     const navigate = useNavigate();
@@ -59,13 +89,14 @@ const Reservations = () => {
             navigate({
                 pathname: "/reservation-confirmation",
                 search: createSearchParams(values).toString()
-            })
+            });
         }
     };
+
     return (
         <main>
             <HeroSection variant="other" />
-            <FormProvider initialValues={initialValues} validate={validate} onSubmit={onSubmit}>
+            <FormProvider initialValues={initialValues} onSubmit={onSubmit}>
                 <ReservationForm />
             </FormProvider>
         </main>

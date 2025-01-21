@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Button from './ui/button';
 import Input from './ui/input';
@@ -26,48 +25,34 @@ const seatingOptions = [
 ]
 
 const ReservationForm = () => {
-    const { values, errors, handleChange, handleBlur, handleSubmit } = useFormContext();
-    const [firstStepError, setFirstStepError] = useState(false);
-    const [secondStepError, setSecondStepError] = useState(false);
-    const [currentStep, setCurrentStep] = useState(1);
+    const { values, errors, handleChange, handleBlur, handleSubmit, currentStep, handleNextStep, handlePrevStep, stepErrors, setStepErrors } = useFormContext();
     const [timeOptions, setTimeOptions] = useState([]);
-
-    const handleNextStep = (e) => {
-        e.preventDefault();
-        if (!values.date || !values.time || !values.guests || !values.occasion || !values.seating) {
-            setFirstStepError(true);
-            return;
-        }
-        if (errors.date || errors.time || errors.guests || errors.occasion || errors.seating) {
-            setFirstStepError(true);
-            return;
-        }
-        setFirstStepError(false);
-        setCurrentStep((prev) => prev + 1);
-    };
-    const handlePrevStep = () => {
-        setSecondStepError(false);
-        setCurrentStep((prev) => prev - 1)
-    };
 
     const handleDateField = (e) => {
         const times = fetchAPI(new Date(e.target.value));
         handleChange(e);
         setTimeOptions(times);
-    }
+    };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        if (!values.name || !values.email || !values.phone) {
-            setSecondStepError(true);
+        const step = `step${currentStep}`;
+        const stepValues = values[step];
+        const stepErrors = Object.keys(stepValues).reduce((acc, key) => {
+            const error = stepValues[key].validate(stepValues[key].value);
+            if (error) {
+                acc[key] = error;
+            }
+            return acc;
+        }, {});
+
+        if (Object.keys(stepErrors).length > 0) {
+            setStepErrors(stepErrors);
             return;
         }
-        if (errors.name || errors.email || errors.phone) {
-            setSecondStepError(true);
-            return;
-        }
+
         handleSubmit(e);
-    }
+    };
 
     return (
         <section className="reservation-form container max-w-screen-sm py-20">
@@ -81,7 +66,6 @@ const ReservationForm = () => {
                         className="group flex items-center text-green"
                         onClick={handlePrevStep}
                     >
-
                         <ChevronLeft className="w-5 h-5 transform transition-transform duration-300 group-hover:-translate-x-1" />
                         <span className="ml-2">Back</span>
                     </button>
@@ -95,7 +79,7 @@ const ReservationForm = () => {
                             type="date"
                             name="date"
                             label="Date"
-                            value={values.date}
+                            value={values.step1.date.value}
                             onChange={handleDateField}
                             onBlur={handleBlur}
                             placeholder={"Enter a date"}
@@ -106,7 +90,7 @@ const ReservationForm = () => {
                             options={timeOptions.map((time) => ({ label: time, value: time }))}
                             name="time"
                             label="Time"
-                            value={values.time}
+                            value={values.step1.time.value}
                             onChange={handleChange}
                             placeholder={timeOptions.length ? "Select a time" : "Select a date first"}
                             required
@@ -115,7 +99,7 @@ const ReservationForm = () => {
                             type="number"
                             name="guests"
                             label="Number of guests"
-                            value={values.guests}
+                            value={values.step1.guests.value}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             required
@@ -126,7 +110,7 @@ const ReservationForm = () => {
                             name="occasion"
                             label="Occasion"
                             placeholder="Select an occasion"
-                            value={values.occasion}
+                            value={values.step1.occasion.value}
                             onChange={handleChange}
                             required
                             error={errors.occasion}
@@ -135,12 +119,12 @@ const ReservationForm = () => {
                             options={seatingOptions}
                             name="seating"
                             label="Seating Preference"
-                            value={values.seating}
+                            value={values.step1.seating.value}
                             onChange={handleChange}
                             required
                             error={errors.seating}
                         />
-                        {firstStepError && (
+                        {Object.keys(stepErrors).length > 0 && (
                             <p className="flex items-center mt-2 text-xs text-red-500">
                                 <DangerIcon className="w-5 h-5 mr-1.5" />
                                 Please fill in all the required fields.
@@ -157,7 +141,7 @@ const ReservationForm = () => {
                             type="text"
                             name="name"
                             label="Name"
-                            value={values.name}
+                            value={values.step2.name.value}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Enter your name"
@@ -168,7 +152,7 @@ const ReservationForm = () => {
                             type="email"
                             name="email"
                             label="Email"
-                            value={values.email}
+                            value={values.step2.email.value}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Enter your email"
@@ -179,7 +163,7 @@ const ReservationForm = () => {
                             type="tel"
                             name="phone"
                             label="Phone"
-                            value={values.phone}
+                            value={values.step2.phone.value}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             placeholder="Enter your phone number"
@@ -190,8 +174,10 @@ const ReservationForm = () => {
                             name="requests"
                             label="Requests"
                             placeholder="Enter any requests"
+                            value={values.step2.requests.value}
+                            onChange={handleChange}
                         />
-                        {secondStepError && (
+                        {Object.keys(stepErrors).length > 0 && (
                             <p className="flex items-center mt-2 text-xs text-red-500">
                                 <DangerIcon className="w-5 h-5 mr-1.5" />
                                 Please fill in all the required fields.
