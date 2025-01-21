@@ -103,7 +103,8 @@ export const FormProvider = ({ initialValues, onSubmit, children }) => {
                 currentStep,
                 handleNextStep,
                 handlePrevStep,
-                stepErrors
+                stepErrors,
+                setStepErrors
             }}
         >
             {children}
