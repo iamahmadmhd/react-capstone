@@ -1,9 +1,4 @@
-import { useEffect } from 'react';
-
 const Card = ({ image, title, description, link = {} }) => {
-    useEffect(() => {
-        console.log({ image });
-    }, [image]);
 
     const { href, label } = link;
 
