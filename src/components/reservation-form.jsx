@@ -70,16 +70,18 @@ const ReservationForm = () => {
                             required
                             error={errors.date}
                         />
-                        <Select
-                            options={timeOptions.length ? timeOptions.map((time) => ({ label: time, value: time })) : [{ label: "Select a date first", value: "" }]}
-                            name="time"
-                            label="Time"
-                            defaultValue={timeOptions.length ? values.step1.time.value : ""}
-                            onChange={handleChange}
-                            required
-                            disabled={!timeOptions.length}
-                            error={errors.time}
-                        />
+                        {timeOptions.length > 0 && (
+                            <Select
+                                options={timeOptions.map((time) => ({ label: time, value: time }))}
+                                name="time"
+                                label="Time"
+                                defaultValue={timeOptions[0].value}
+                                onChange={handleChange}
+                                required
+                                disabled={!timeOptions.length}
+                                error={errors.time}
+                            />
+                        )}
                         <Input
                             type="number"
                             name="guests"
