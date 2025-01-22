@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/react-capstone/static/css/main.28a7a315.css",
-    "main.js": "/react-capstone/static/js/main.80567e9a.js",
+    "main.js": "/react-capstone/static/js/main.4b71fee5.js",
     "static/js/453.7e033ae9.chunk.js": "/react-capstone/static/js/453.7e033ae9.chunk.js",
     "static/media/markazi-text-arabic-wght-normal.woff2": "/react-capstone/static/media/markazi-text-arabic-wght-normal.1c078dfbe01e432743ff.woff2",
     "static/media/karla-latin-wght-normal.woff2": "/react-capstone/static/media/karla-latin-wght-normal.d89217cdde286d8935ce.woff2",
@@ -11,11 +11,11 @@
     "static/media/markazi-text-vietnamese-wght-normal.woff2": "/react-capstone/static/media/markazi-text-vietnamese-wght-normal.30b831878258703b35e1.woff2",
     "index.html": "/react-capstone/index.html",
     "main.28a7a315.css.map": "/react-capstone/static/css/main.28a7a315.css.map",
-    "main.80567e9a.js.map": "/react-capstone/static/js/main.80567e9a.js.map",
+    "main.4b71fee5.js.map": "/react-capstone/static/js/main.4b71fee5.js.map",
     "453.7e033ae9.chunk.js.map": "/react-capstone/static/js/453.7e033ae9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.28a7a315.css",
-    "static/js/main.80567e9a.js"
+    "static/js/main.4b71fee5.js"
   ]
 }
