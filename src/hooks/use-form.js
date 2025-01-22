@@ -7,17 +7,14 @@ export const FormProvider = ({ initialValues, onSubmit, children }) => {
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
-    const [stepErrors, setStepErrors] = useState({});
 
-    const validate = (values) => {
+    const validateStep = (stepValues) => {
         const errors = {};
-        Object.keys(values).forEach(step => {
-            Object.keys(values[step]).forEach(field => {
-                const error = values[step][field].validate(values[step][field].value);
-                if (error) {
-                    errors[field] = error;
-                }
-            });
+        Object.keys(stepValues).forEach(field => {
+            const error = stepValues[field].validate(stepValues[field].value);
+            if (error) {
+                errors[field] = error;
+            }
         });
         return errors;
     };
@@ -35,59 +32,49 @@ export const FormProvider = ({ initialValues, onSubmit, children }) => {
                 }
             }
         }));
-        setErrors((prevErrors) => ({ ...prevErrors, [name]: '' })); // Clear field-specific error
-    };
-
-    const handleBlur = async (e) => {
-        const { name, value } = e.target;
-        const step = `step${currentStep}`;
-        const validationErrors = validate(values);
-        if (validationErrors[name]) {
-            setErrors((prevErrors) => ({ ...prevErrors, [name]: validationErrors[name] }));
-        }
+        setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[name];
+            return newErrors;
+        });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const validationErrors = validate(values);
+        const validationErrors = validateStep(values[`step${currentStep}`]);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-        } else {
-            setIsSubmitting(true);
-            const flattenedValues = Object.keys(values).reduce((acc, step) => {
-                Object.keys(values[step]).forEach(field => {
-                    acc[field] = values[step][field].value;
-                });
-                return acc;
-            }, {});
-            onSubmit(flattenedValues);
-            setIsSubmitting(false);
+            return;
         }
+        setErrors({});
+        setIsSubmitting(true);
+        const flattenedValues = Object.keys(values).reduce((acc, step) => {
+            Object.keys(values[step]).forEach(field => {
+                acc[field] = values[step][field].value;
+            });
+            return acc;
+        }, {});
+        onSubmit(flattenedValues);
+        setIsSubmitting(false);
     };
 
     const handleNextStep = (e) => {
         e.preventDefault();
         const step = `step${currentStep}`;
-        const stepValues = initialValues[step];
-        const stepErrors = Object.keys(stepValues).reduce((acc, key) => {
-            const error = stepValues[key].validate(values[step][key].value);
-            if (error) {
-                acc[key] = error;
-            }
-            return acc;
-        }, {});
+        const stepValues = values[step];
+        const stepErrors = validateStep(stepValues);
 
         if (Object.keys(stepErrors).length > 0) {
-            setStepErrors(stepErrors);
+            setErrors(stepErrors);
             return;
         }
 
-        setStepErrors({});
+        setErrors({});
         setCurrentStep((prev) => prev + 1);
     };
 
     const handlePrevStep = () => {
-        setStepErrors({});
+        setErrors({});
         setCurrentStep((prev) => prev - 1);
     };
 
@@ -98,13 +85,10 @@ export const FormProvider = ({ initialValues, onSubmit, children }) => {
                 errors,
                 isSubmitting,
                 handleChange,
-                handleBlur,
                 handleSubmit,
                 currentStep,
                 handleNextStep,
-                handlePrevStep,
-                stepErrors,
-                setStepErrors
+                handlePrevStep
             }}
         >
             {children}

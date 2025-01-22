@@ -22,10 +22,10 @@ const seatingOptions = [
     { label: "Indoor", value: "indoor" },
     { label: "Outdoor", value: "outdoor" },
     { label: "Both", value: "both" },
-]
+];
 
 const ReservationForm = () => {
-    const { values, errors, handleChange, handleBlur, handleSubmit, currentStep, handleNextStep, handlePrevStep, stepErrors, setStepErrors } = useFormContext();
+    const { values, errors, handleChange, handleSubmit, currentStep, handleNextStep, handlePrevStep } = useFormContext();
     const [timeOptions, setTimeOptions] = useState([]);
 
     const handleDateField = (e) => {
@@ -36,21 +36,6 @@ const ReservationForm = () => {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        const step = `step${currentStep}`;
-        const stepValues = values[step];
-        const stepErrors = Object.keys(stepValues).reduce((acc, key) => {
-            const error = stepValues[key].validate(stepValues[key].value);
-            if (error) {
-                acc[key] = error;
-            }
-            return acc;
-        }, {});
-
-        if (Object.keys(stepErrors).length > 0) {
-            setStepErrors(stepErrors);
-            return;
-        }
-
         handleSubmit(e);
     };
 
@@ -81,19 +66,19 @@ const ReservationForm = () => {
                             label="Date"
                             value={values.step1.date.value}
                             onChange={handleDateField}
-                            onBlur={handleBlur}
                             placeholder={"Enter a date"}
                             required
                             error={errors.date}
                         />
                         <Select
-                            options={timeOptions.map((time) => ({ label: time, value: time }))}
+                            options={timeOptions.length ? timeOptions.map((time) => ({ label: time, value: time })) : [{ label: "Select a date first", value: "" }]}
                             name="time"
                             label="Time"
-                            value={values.step1.time.value}
+                            defaultValue={timeOptions.length ? values.step1.time.value : ""}
                             onChange={handleChange}
-                            placeholder={timeOptions.length ? "Select a time" : "Select a date first"}
                             required
+                            disabled={!timeOptions.length}
+                            error={errors.time}
                         />
                         <Input
                             type="number"
@@ -101,7 +86,6 @@ const ReservationForm = () => {
                             label="Number of guests"
                             value={values.step1.guests.value}
                             onChange={handleChange}
-                            onBlur={handleBlur}
                             required
                             error={errors.guests}
                         />
@@ -119,15 +103,15 @@ const ReservationForm = () => {
                             options={seatingOptions}
                             name="seating"
                             label="Seating Preference"
-                            value={values.step1.seating.value}
+                            defaultValue={values.step1.seating.value}
                             onChange={handleChange}
                             required
                             error={errors.seating}
                         />
-                        {Object.keys(stepErrors).length > 0 && (
+                        {Object.keys(errors).length > 0 && (
                             <p className="flex items-center mt-2 text-xs text-red-500">
                                 <DangerIcon className="w-5 h-5 mr-1.5" />
-                                Please fill in all the required fields.
+                                Please fill in all the required fields and ensure values are valid.
                             </p>
                         )}
                         <div className="mt-4">
@@ -143,7 +127,6 @@ const ReservationForm = () => {
                             label="Name"
                             value={values.step2.name.value}
                             onChange={handleChange}
-                            onBlur={handleBlur}
                             placeholder="Enter your name"
                             required
                             error={errors.name}
@@ -154,7 +137,6 @@ const ReservationForm = () => {
                             label="Email"
                             value={values.step2.email.value}
                             onChange={handleChange}
-                            onBlur={handleBlur}
                             placeholder="Enter your email"
                             required
                             error={errors.email}
@@ -165,7 +147,6 @@ const ReservationForm = () => {
                             label="Phone"
                             value={values.step2.phone.value}
                             onChange={handleChange}
-                            onBlur={handleBlur}
                             placeholder="Enter your phone number"
                             required
                             error={errors.phone}
@@ -176,11 +157,12 @@ const ReservationForm = () => {
                             placeholder="Enter any requests"
                             value={values.step2.requests.value}
                             onChange={handleChange}
+                            error={errors.requests}
                         />
-                        {Object.keys(stepErrors).length > 0 && (
+                        {Object.keys(errors).length > 0 && (
                             <p className="flex items-center mt-2 text-xs text-red-500">
                                 <DangerIcon className="w-5 h-5 mr-1.5" />
-                                Please fill in all the required fields.
+                                Please fill in all the required fields and ensure values are valid.
                             </p>
                         )}
                         <div className="mt-4">

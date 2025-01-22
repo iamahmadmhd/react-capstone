@@ -2,9 +2,9 @@ import DangerIcon from "../../icons/danger";
 import Label from "./label";
 import Radio from "./radio";
 
-const RadioGroup = ({ options, name, label, value, onChange, required, error }) => {
+const RadioGroup = ({ options, name, label, defaultValue, onChange, required, error }) => {
     const renderedOptions = options.map((option) => (
-        <Radio key={option.value} name={name} value={option.value} label={option.label} checked={option.value === value} onChange={onChange} />
+        <Radio key={option.value} name={name} value={option.value} label={option.label} checked={option.value === defaultValue} onChange={onChange} />
     ));
 
     return (

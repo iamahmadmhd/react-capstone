@@ -15,7 +15,7 @@ const initialValues = {
             }
         },
         time: {
-            value: '',
+            value: "",
             validate: (value) => {
                 if (!value) {
                     return 'Time is required';
@@ -33,7 +33,7 @@ const initialValues = {
             }
         },
         occasion: {
-            value: '',
+            value: "birthday",
             validate: (value) => {
                 if (!value) {
                     return 'Occasion is required';
@@ -41,7 +41,7 @@ const initialValues = {
             }
         },
         seating: {
-            value: 'indoor',
+            value: "indoor",
             validate: (value) => {
                 if (!value) {
                     return 'Seating is required';
@@ -51,7 +51,7 @@ const initialValues = {
     },
     step2: {
         name: {
-            value: '',
+            value: "",
             validate: (value) => {
                 if (!value) {
                     return 'Name is required';
@@ -59,7 +59,7 @@ const initialValues = {
             }
         },
         email: {
-            value: '',
+            value: "",
             validate: (value) => {
                 if (!value) {
                     return 'Email is required';
@@ -67,7 +67,7 @@ const initialValues = {
             }
         },
         phone: {
-            value: '',
+            value: "",
             validate: (value) => {
                 if (!value) {
                     return 'Phone is required';
@@ -75,7 +75,7 @@ const initialValues = {
             }
         },
         requests: {
-            value: '',
+            value: "",
             validate: () => { }
         }
     }
