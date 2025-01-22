@@ -1,12 +1,23 @@
-const Radio = ({ name, value, label, checked, onChange }) => {
+import React from 'react';
+
+const Radio = React.forwardRef((props, ref) => {
+    const { name, value, checked, onChange, label, ...inputProps } = props;
+
     return (
-        <label className="mb-2 flex items-center gap-2" htmlFor={value}>
-            <input type="radio" name={name} value={value} id={value} onChange={onChange} className="border-green text-green checked:bg-green focus:border-green focus:ring focus:ring-green focus:ring-opacity-50" checked={checked} />
-            <span className="text-sm text-black">
-                {label}
-            </span>
-        </label>
-    )
-};
+        <div className="flex items-center">
+            <input
+                ref={ref}
+                type="radio"
+                name={name}
+                value={value}
+                checked={checked}
+                onChange={onChange}
+                className="border-green text-green checked:bg-green focus:border-green focus:ring focus:ring-green focus:ring-opacity-50"
+                {...inputProps}
+            />
+            <label className="ml-2 text-black">{label}</label>
+        </div>
+    );
+});
 
 export default Radio;

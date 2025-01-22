@@ -12,7 +12,7 @@ import ReservationConfirmation from "./pages/reservation-confirmation";
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -2,37 +2,80 @@ import { createContext, useContext, useState } from 'react';
 
 const FormContext = createContext();
 
-export const FormProvider = ({ initialValues, validate, onSubmit, children }) => {
+export const FormProvider = ({ initialValues, onSubmit, children }) => {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [currentStep, setCurrentStep] = useState(1);
+
+    const validateStep = (stepValues) => {
+        const errors = {};
+        Object.keys(stepValues).forEach(field => {
+            const error = stepValues[field].validate(stepValues[field].value);
+            if (error) {
+                errors[field] = error;
+            }
+        });
+        return errors;
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setValues((prev) => ({ ...prev, [name]: value }));
-        setErrors((prevErrors) => ({ ...prevErrors, [name]: '' })); // Clear field-specific error
-    };
-
-    const handleBlur = async (e) => {
-        const { name, value } = e.target;
-
-        // Validate field onBlur
-        const validationErrors = validate({ ...values, [name]: value });
-        if (validationErrors[name]) {
-            setErrors((prevErrors) => ({ ...prevErrors, [name]: validationErrors[name] }));
-        }
+        const step = `step${currentStep}`;
+        setValues((prev) => ({
+            ...prev,
+            [step]: {
+                ...prev[step],
+                [name]: {
+                    ...prev[step][name],
+                    value
+                }
+            }
+        }));
+        setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[name];
+            return newErrors;
+        });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const validationErrors = validate(values);
+        const validationErrors = validateStep(values[`step${currentStep}`]);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-        } else {
-            setIsSubmitting(true);
-            onSubmit(values);
-            setIsSubmitting(false);
+            return;
         }
+        setErrors({});
+        setIsSubmitting(true);
+        const flattenedValues = Object.keys(values).reduce((acc, step) => {
+            Object.keys(values[step]).forEach(field => {
+                acc[field] = values[step][field].value;
+            });
+            return acc;
+        }, {});
+        onSubmit(flattenedValues);
+        setIsSubmitting(false);
+    };
+
+    const handleNextStep = (e) => {
+        e.preventDefault();
+        const step = `step${currentStep}`;
+        const stepValues = values[step];
+        const stepErrors = validateStep(stepValues);
+
+        if (Object.keys(stepErrors).length > 0) {
+            setErrors(stepErrors);
+            return;
+        }
+
+        setErrors({});
+        setCurrentStep((prev) => prev + 1);
+    };
+
+    const handlePrevStep = () => {
+        setErrors({});
+        setCurrentStep((prev) => prev - 1);
     };
 
     return (
@@ -42,8 +85,10 @@ export const FormProvider = ({ initialValues, validate, onSubmit, children }) =>
                 errors,
                 isSubmitting,
                 handleChange,
-                handleBlur,
                 handleSubmit,
+                currentStep,
+                handleNextStep,
+                handlePrevStep
             }}
         >
             {children}
